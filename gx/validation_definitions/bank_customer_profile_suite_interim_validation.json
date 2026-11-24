@@ -1,0 +1,22 @@
+{
+  "data": {
+    "asset": {
+      "id": "b0ab17f4-cb11-4bc5-bfa4-98d55f4a1246",
+      "name": "bank_customers_interim"
+    },
+    "batch_definition": {
+      "id": "86086e2c-8006-4024-a2dd-95ba6ae7e9a3",
+      "name": "batch_interim"
+    },
+    "datasource": {
+      "id": "143863c4-0722-4c96-aa1d-dd9d5aae4cb0",
+      "name": "pandas_interim"
+    }
+  },
+  "id": "0426c2b0-e640-4e80-bd49-9a7697a1253b",
+  "name": "bank_customer_profile_suite_interim_validation",
+  "suite": {
+    "id": "5cf1b3b4-691e-47ec-a00b-5526ae95b4c0",
+    "name": "bank_customer_profile_suite_interim"
+  }
+}

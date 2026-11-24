@@ -1,0 +1,5 @@
+region,region_code,country,population_share,fca_scope,fairness_reference_group
+England,E92000001,England,0.8400,UK-FCA,True
+Scotland,S92000003,Scotland,0.0810,UK-FCA,False
+Wales,W92000004,Wales,0.0470,UK-FCA,False
+Northern Ireland,N92000002,Northern Ireland,0.0280,UK-FCA,False

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mplcache/
+
+# Pipeline outputs are reproducible, so they are not versioned.
+data/interim/*
+data/processed/*
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# Secrets - never commit the hashing salt.
+.env
+
+# Local artefacts
+artifacts/
+!artifacts/.gitkeep
+
+# OS
+.DS_Store

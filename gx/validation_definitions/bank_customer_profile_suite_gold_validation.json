@@ -1,0 +1,22 @@
+{
+  "data": {
+    "asset": {
+      "id": "fcf0b817-35e6-47e7-8373-6e7f9de9e41e",
+      "name": "bank_customers_gold"
+    },
+    "batch_definition": {
+      "id": "df8009f7-ac98-4121-9f46-1a4e48926db4",
+      "name": "batch_gold"
+    },
+    "datasource": {
+      "id": "0d8e339b-2725-43aa-8461-94222805cd26",
+      "name": "pandas_gold"
+    }
+  },
+  "id": "c0692e49-b7e4-436b-9155-eddc10fab84c",
+  "name": "bank_customer_profile_suite_gold_validation",
+  "suite": {
+    "id": "425e0dfe-49e2-454a-b53d-f175b20c317f",
+    "name": "bank_customer_profile_suite_gold"
+  }
+}

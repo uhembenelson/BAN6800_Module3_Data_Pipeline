@@ -1,0 +1,39 @@
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ban6800-module3-pipeline:1.0.0
+    container_name: ban6800-m3-pipeline
+    environment:
+      PIPELINE_HASH_SALT: ${PIPELINE_HASH_SALT:?set PIPELINE_HASH_SALT in your shell or .env}
+      PIPELINE_SEED: ${PIPELINE_SEED:-42}
+      PREFECT_API_URL: ${PREFECT_API_URL:-}
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data/processed:/app/data/processed
+    command: ["python", "-m", "flows.local_runner"]
+
+  # Optional: run the Prefect DAG against a local Prefect server instead of the
+  # plain runner. Enable with:  docker compose --profile orchestrated up
+  prefect-server:
+    image: prefecthq/prefect:3-latest
+    container_name: ban6800-m3-prefect
+    profiles: ["orchestrated"]
+    command: prefect server start --host 0.0.0.0
+    ports:
+      - "4200:4200"
+
+  orchestrated-run:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    profiles: ["orchestrated"]
+    depends_on:
+      - prefect-server
+    environment:
+      PIPELINE_HASH_SALT: ${PIPELINE_HASH_SALT:?set PIPELINE_HASH_SALT}
+      PREFECT_API_URL: http://prefect-server:4200/api
+    volumes:
+      - ./artifacts:/app/artifacts
+    entrypoint: ["python", "-m", "flows.bank_pipeline_flow"]

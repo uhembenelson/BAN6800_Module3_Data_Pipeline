@@ -1,0 +1,13 @@
+balance_band,job_classification,recommended_product_family,risk_appetite,human_approval_required
+Low,Blue Collar,Everyday current account with budgeting tools,Low,True
+Low,Other,Everyday current account with savings nudge,Low,True
+Low,White Collar,Graduate current account with fee waiver,Low,True
+Mid,Blue Collar,Regular saver plus tooling cover,Medium,True
+Mid,Other,Flexible saver with rate ladder,Medium,True
+Mid,White Collar,Cash ISA top-up with wealth pathway,Medium,True
+High,Blue Collar,Structured savings bond with term flexibility,Medium,True
+High,Other,Fixed-rate bond with adviser review,Medium,True
+High,White Collar,Premier current account with ISA wrapper,High,True
+Premium,Blue Collar,Retention review: fee-free savings plus adviser call,High,True
+Premium,Other,Retention review: wealth management introduction,High,True
+Premium,White Collar,Wealth management with dedicated adviser,High,True

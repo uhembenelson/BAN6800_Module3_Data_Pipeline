@@ -1,0 +1,113 @@
+# BAN6800 Module 3 - pipeline configuration
+# All values are declarative so the DAG, validation suite and governance rules
+# read from one place. Environment variables override the secrets only.
+
+run:
+  name: uk_bank_customer_pipeline
+  as_of_date: "2015-12-31"        # snapshot date used for tenure derivation
+  random_seed: 42
+  actor: etl-service@bank-uk
+
+ingestion:
+  raw_path: data/raw/P6_UK_Bank_Customer_Profile.csv
+  date_format: "%d.%b.%y"
+  direct_identifiers: [name, surname]
+  required_columns:
+    - customer_id
+    - gender
+    - age
+    - region
+    - job_classification
+    - date_joined
+    - balance
+  dtypes:
+    customer_id: str
+    gender: category
+    age: float
+    region: category
+    job_classification: category
+    date_joined: str
+    balance: float
+
+augmentation:
+  enabled: true
+  seed: 42
+  target_total_records: 5000
+  record_buffer: 160             # headroom so cleaning still lands above 5,000
+  synthetic_id_base: 9000000
+  noise:
+    missing_age_rate: 0.030
+    missing_balance_rate: 0.020
+    missing_job_rate: 0.015
+    duplicate_rate: 0.004
+    invalid_age_count: 6
+    negative_balance_count: 5
+    malformed_date_count: 5
+
+anonymisation:
+  hash_algorithm: sha256
+  salt_env_var: PIPELINE_HASH_SALT
+  dev_salt_fallback: "dev-only-salt-not-for-production"
+  surrogate_ref_prefix: "CUS-"
+  pii_patterns:
+    email: "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+    phone_uk: "\\b(?:\\+44\\s?7\\d{3}|07\\d{3})\\s?\\d{3}\\s?\\d{3}\\b"
+    postcode: "\\b[A-Z]{1,2}\\d[A-Z\\d]?\\s?\\d[A-Z]{2}\\b"
+
+cleaning:
+  age_min: 16
+  age_max: 100
+  minority_age: 18            # under 18 => excluded from marketing eligibility
+  outlier_iqr_multiplier: 1.5
+  job_class_fallback: "Unknown"
+  impute_strategy: median
+
+transforms:
+  age_bands: [[16, 24], [25, 34], [35, 44], [45, 54], [55, 64], [65, 120]]
+  balance_bands: [0, 15000, 45000, 90000, 1000000000]
+  balance_band_labels: ["Low", "Mid", "High", "Premium"]
+  high_value_percentile: 0.75
+
+integration:
+  region_dimension: reference/region_dimension.csv
+  product_dimension: reference/product_holding_dimension.csv
+  minimum_group_size: 100
+
+validation:
+  suite_name: bank_customer_profile_suite
+  gate_b_fail_on_error: true
+  expect_columns:
+    - customer_key
+    - gender
+    - age
+    - age_band
+    - region
+    - region_code
+    - job_classification
+    - date_joined
+    - tenure_days
+    - balance
+    - balance_band
+    - is_minor
+    - marketing_eligible
+    - high_value_flag
+    - churn_label
+    - snapshot_date
+
+bias:
+  protected_attributes: [gender, region, age_band]
+  outcome_column: high_value_flag
+  minimum_group_size: 100
+  disparate_impact_lower: 0.80
+  disparate_impact_upper: 1.25
+
+governance:
+  retention_days_raw: 730        # 24 months, Module 1 rule
+  retention_days_gold: 1095
+  lawful_basis: "UK GDPR Art. 6(1)(f) legitimate interests - FCA Consumer Duty"
+  roles:
+    data_engineer: [read_raw, transform, write_processed]
+    lead_data_scientist: [read_processed]
+    marketing_manager: [read_marketing_view]
+    dpo: [read_audit_log, read_governance]
+    auditor: [read_audit_log]

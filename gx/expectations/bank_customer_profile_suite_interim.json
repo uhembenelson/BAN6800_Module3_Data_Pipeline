@@ -1,0 +1,174 @@
+{
+  "expectations": [
+    {
+      "id": "231cc79b-51ac-40f0-ab19-b430ad6f806f",
+      "kwargs": {
+        "max_value": 50000,
+        "min_value": 5000
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Module 3 contractual record floor"
+      },
+      "severity": "critical",
+      "type": "expect_table_row_count_to_be_between"
+    },
+    {
+      "id": "cea0c088-980a-4259-8c18-277c632aa4d4",
+      "kwargs": {
+        "column": "customer_key"
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Every record must carry a pseudonymous key"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "8c1a4c32-4695-4bc6-97bf-e9f75148aaed",
+      "kwargs": {
+        "column": "customer_key"
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "One row per customer - prevents fan-out in Module 4 features"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_be_unique"
+    },
+    {
+      "id": "7eb72212-3bd4-4907-9509-8d0359f92132",
+      "kwargs": {
+        "column": "age"
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Age is required for fairness slicing"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "87b97dc0-44b8-4fd9-b940-74de4ca725a7",
+      "kwargs": {
+        "column": "age",
+        "max_value": 100.0,
+        "min_value": 16.0
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Contractual plausibility band for a retail banking customer"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "2a384da6-b7fd-4869-84cf-de860e9af974",
+      "kwargs": {
+        "column": "balance"
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Balance drives every downstream feature"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "35b0c9c2-5c66-4e2a-af7b-412cfb85f293",
+      "kwargs": {
+        "column": "balance",
+        "max_value": 250000.0,
+        "min_value": 0.0
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "No negative balances; ceiling guards against keying errors"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "11761b89-4dd0-421f-930c-adec19cf1cea",
+      "kwargs": {
+        "column": "gender",
+        "value_set": [
+          "Male",
+          "Female"
+        ]
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Contracted demographic domain"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "3631842c-4c18-4569-9894-fe7a456aef64",
+      "kwargs": {
+        "column": "region",
+        "value_set": [
+          "England",
+          "Scotland",
+          "Wales",
+          "Northern Ireland"
+        ]
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Four UK regions in scope per the Module 1 vision"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "f8b1def0-b5ba-43d5-8650-73609ede11fe",
+      "kwargs": {
+        "column": "job_classification",
+        "value_set": [
+          "Blue Collar",
+          "White Collar",
+          "Other",
+          "Unknown"
+        ]
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Unknown is an explicit level, never a silent null"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "ff1697b5-82dc-4e31-85ce-d1740a0ae918",
+      "kwargs": {
+        "column": "date_joined"
+      },
+      "meta": {
+        "gate": "advisory",
+        "owner": "data-engineering",
+        "why": "Tenure cannot be derived without a joining date"
+      },
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    }
+  ],
+  "id": "5cf1b3b4-691e-47ec-a00b-5526ae95b4c0",
+  "meta": {
+    "great_expectations_version": "1.25.0"
+  },
+  "name": "bank_customer_profile_suite_interim",
+  "notes": null
+}
